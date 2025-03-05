@@ -6,20 +6,12 @@ name: Deploy to S3
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - master
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
-      - name : setup node.js
-        uses: actions/setup-node@v3
-        with : 
-            node-version : '16'
         
       - name : Install dependies
         uses : npm install
@@ -35,4 +27,4 @@ jobs:
           aws-region: ap-south-1
       - name: Sync build folder to S3 bucket
         run: |
-            aws s3 sync ./build s3://yash-bucket-cicd --exclude *.git/*
+            aws s3 sync ./build s3://yash-bucket-cicd
