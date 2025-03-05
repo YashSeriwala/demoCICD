@@ -1,11 +1,5 @@
-
-# This is for copy one object from s3 to another s3
-
 name: Deploy to S3
-# 'on':
-#   push:
-#     branches:
-#       - main
+
 on: 
   workflow_dispatch:
 
@@ -16,18 +10,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         
-      - name : Install dependies
+      - name: Install dependencies
         run: npm install
 
-      - name : create build
+      - name: Create build
         run: npm run build
       
       - name: Set up AWS CLI
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: '${{ secrets.AccessKey}}'
-          aws-secret-access-key: '${{ secrets.SecretKey}}'
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
+
       - name: Sync build folder to S3 bucket
-        run: |
-            aws s3 sync ./build s3://yash-bucket-cicd
+        run: aws s3 sync ./build s3://yash-bucket-cicd --delete
